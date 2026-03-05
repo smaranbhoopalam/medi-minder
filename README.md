@@ -13,7 +13,7 @@ AI powered medication reminder and stress monitoring system.
 - Graph visualization of health data
 
 ## Tech Stack
-Frontend: React
-Backend: Node.js
-AI: LLM integration
-Database: Firebase / MongoDB
+- Frontend: React
+- Backend: Node.js
+- AI: LLM integration
+- Database: Firebase / MongoDB
