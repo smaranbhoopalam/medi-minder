@@ -6,59 +6,47 @@ const supabaseClient = supabase.createClient(
   SUPABASE_KEY
 );
 
-async function initUser() {
+async function initUser(){
 
-  const { data: { user } } = await supabaseClient.auth.getUser();
+  const { data:{ user } } = await supabaseClient.auth.getUser();
 
-  if (!user) {
-    window.location.href = "index.html";
+  if(!user){
+    window.location.href="index.html";
     return;
   }
 
   document.getElementById("userEmail").innerText =
-    "Logged in as: " + user.email;
+  "Logged in as: " + user.email;
 
-  // Insert user into database if not exists
-  await supabaseClient
-    .from("users")
-    .upsert({
-      id: user.id,
-      email: user.email,
-      name: user.user_metadata.full_name
-    });
+  document.getElementById("profileName").innerText =
+  user.user_metadata.full_name;
 
 }
 
 initUser();
 
+
 document.getElementById("logout").onclick = async () => {
 
-  await supabaseClient.auth.signOut();
+await supabaseClient.auth.signOut();
 
-  window.location.href = "index.html";
+window.location.href="index.html";
 
 };
 
-// async function checkUser() {
 
-//   const { data: { user } } = await supabaseClient.auth.getUser();
+document.getElementById("addMedicine").onclick = () => {
 
-//   if (!user) {
-//     window.location.href = "index.html";
-//   } else {
-//     document.getElementById("userEmail").innerText =
-//       "Logged in as: " + user.email;
-//   }
+const name = document.getElementById("medicineName").value;
 
-// }
+const time = document.getElementById("medicineTime").value;
 
-// checkUser();
+const list = document.getElementById("medicineList");
 
-// document.getElementById("logout").onclick = async () => {
+const item = document.createElement("li");
 
-//   await supabaseClient.auth.signOut();
+item.innerHTML = name + " <span>" + time + "</span>";
 
-//   window.location.href = "index.html";
+list.appendChild(item);
 
-// };
-
+};

@@ -2,21 +2,62 @@
 <html>
 
 <head>
-<title>Dashboard</title>
+<title>Medi-Minder Dashboard</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>Welcome to Medi-Minder Dashboard</h1>
+<div class="navbar">
 
-<p id="userEmail"></p>
+<h2>Medi-Minder</h2>
 
+<div class="nav-right">
+<span id="userEmail"></span>
 <button id="logout">Logout</button>
+</div>
+
+</div>
+
+
+<div class="dashboard">
+
+<div class="card profile">
+
+<h3>Your Profile</h3>
+<p id="profileName">Loading...</p>
+
+</div>
+
+
+<div class="card stress">
+
+<h3>Stress Status</h3>
+<p id="stressScore">Low</p>
+
+</div>
+
+
+<div class="card medicines">
+
+<h3>Your Medicines</h3>
+
+<ul id="medicineList"></ul>
+
+<h4>Add Medicine</h4>
+
+<input id="medicineName" placeholder="Medicine name">
+
+<input id="medicineTime" type="time">
+
+<button id="addMedicine">Add Medicine</button>
+
+</div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script src="dashboard.js"></script>
 
 </body>
-
 </html>
