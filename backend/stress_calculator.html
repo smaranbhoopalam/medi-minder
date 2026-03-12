@@ -1,0 +1,527 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,500;1,300&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Mono',monospace}
+
+.shell{display:grid;grid-template-columns:260px 1fr;min-height:600px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+
+.sidebar{background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:0.25rem}
+
+.brand{font-family:'Fraunces',serif;font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:1.5rem;letter-spacing:-0.02em}
+.brand span{font-style:italic;color:var(--color-text-secondary)}
+
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--border-radius-md);cursor:pointer;font-size:12px;color:var(--color-text-secondary);transition:all 0.15s;border:0.5px solid transparent}
+.nav-item:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.nav-item.active{background:var(--color-background-primary);color:var(--color-text-primary);border-color:var(--color-border-tertiary)}
+.nav-item .dot{width:8px;height:8px;border-radius:50%;background:var(--color-border-secondary);flex-shrink:0}
+.nav-item.done .dot{background:#3B6D11}
+.nav-item.active .dot{background:#185FA5}
+
+.score-wrap{margin-top:auto;padding-top:1rem;border-top:0.5px solid var(--color-border-tertiary)}
+.score-label{font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px}
+.score-ring-wrap{position:relative;width:100%;display:flex;justify-content:center}
+svg.ring{width:120px;height:120px}
+.score-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.score-num strong{font-family:'Fraunces',serif;font-size:28px;font-weight:300;display:block;color:var(--color-text-primary)}
+.score-num small{font-size:10px;color:var(--color-text-secondary)}
+.score-verdict{text-align:center;font-size:11px;margin-top:8px;padding:4px 12px;border-radius:20px;display:inline-block;width:100%}
+
+.main{padding:1.75rem;overflow-y:auto;max-height:600px}
+.step{display:none}
+.step.visible{display:block}
+
+.step-title{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:var(--color-text-primary);margin-bottom:0.25rem}
+.step-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:1.5rem}
+
+.field{margin-bottom:1.25rem}
+.field label{display:block;font-size:11px;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:0.05em;text-transform:uppercase}
+.field input[type=range]{width:100%}
+.range-row{display:flex;align-items:center;gap:12px}
+.range-val{font-size:13px;font-weight:500;min-width:48px;color:var(--color-text-primary)}
+
+.chip-group{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:6px 14px;border-radius:20px;font-size:12px;border:0.5px solid var(--color-border-secondary);cursor:pointer;color:var(--color-text-secondary);transition:all 0.12s;background:transparent}
+.chip:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
+.chip.sel{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.time-input{width:100%;padding:7px 10px;font-size:13px;font-family:'DM Mono',monospace;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary)}
+.time-input:focus{outline:none;border-color:var(--color-border-primary)}
+
+.nav-btns{display:flex;justify-content:space-between;margin-top:2rem;padding-top:1rem;border-top:0.5px solid var(--color-border-tertiary)}
+.btn{padding:8px 20px;font-size:12px;font-family:'DM Mono',monospace;border-radius:var(--border-radius-md);cursor:pointer;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);transition:all 0.12s}
+.btn:hover{background:var(--color-background-secondary)}
+.btn.primary{background:var(--color-text-primary);color:var(--color-background-primary);border-color:transparent}
+.btn.primary:hover{opacity:0.85}
+
+.custom-wrap{display:flex;gap:8px;margin-top:8px}
+.custom-input{flex:1;padding:7px 10px;font-size:12px;font-family:'DM Mono',monospace;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary)}
+.custom-input:focus{outline:none;border-color:var(--color-border-primary)}
+.custom-tag{display:flex;align-items:center;gap:6px;padding:5px 10px;background:var(--color-background-tertiary);border:0.5px solid var(--color-border-tertiary);border-radius:20px;font-size:11px;color:var(--color-text-secondary)}
+.custom-tag .rm{cursor:pointer;color:var(--color-text-tertiary);font-size:14px;line-height:1}
+
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
+.metric-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px}
+.metric-card .mc-label{font-size:10px;color:var(--color-text-tertiary);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px}
+.metric-card .mc-val{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.metric-card .mc-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+
+.bar-wrap{margin-bottom:12px}
+.bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.bar-track{height:6px;background:var(--color-background-tertiary);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+
+.tip-box{background:var(--color-background-secondary);border-left:2px solid var(--color-border-info);border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:10px 14px;margin-bottom:8px}
+.tip-box p{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+
+.typing-area{position:relative}
+.typing-target{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px;font-size:12px;color:var(--color-text-secondary);line-height:1.8;letter-spacing:0.02em;margin-bottom:8px;user-select:none}
+.typing-area .highlight{background:var(--color-background-info);color:var(--color-text-info);border-radius:2px}
+#typing-input{width:100%;padding:8px 10px;font-size:12px;font-family:'DM Mono',monospace;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary)}
+#typing-input:focus{outline:none;border-color:var(--color-border-primary)}
+.typing-stats{display:flex;gap:16px;margin-top:8px}
+.typing-stats span{font-size:11px;color:var(--color-text-secondary)}
+.typing-stats strong{color:var(--color-text-primary)}
+</style>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">stress<span>meter</span></div>
+    <div class="nav-item active" onclick="goTo(0)" id="nav0"><span class="dot"></span>Sleep & rest</div>
+    <div class="nav-item" onclick="goTo(1)" id="nav1"><span class="dot"></span>Food habits</div>
+    <div class="nav-item" onclick="goTo(2)" id="nav2"><span class="dot"></span>Nutrition</div>
+    <div class="nav-item" onclick="goTo(3)" id="nav3"><span class="dot"></span>Behaviour signals</div>
+    <div class="nav-item" onclick="goTo(4)" id="nav4"><span class="dot"></span>Custom factors</div>
+    <div class="nav-item" onclick="goTo(5)" id="nav5"><span class="dot"></span>Results</div>
+
+    <div class="score-wrap">
+      <div class="score-label">live stress score</div>
+      <div class="score-ring-wrap">
+        <svg class="ring" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="48" fill="none" stroke="var(--color-border-tertiary)" stroke-width="10"/>
+          <circle id="ring-fill" cx="60" cy="60" r="48" fill="none" stroke="#E24B4A" stroke-width="10"
+            stroke-dasharray="301.6" stroke-dashoffset="301.6" stroke-linecap="round"
+            transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 0.5s ease,stroke 0.4s"/>
+        </svg>
+        <div class="score-num"><strong id="score-num">0</strong><small>/ 100</small></div>
+      </div>
+      <div id="verdict" class="score-verdict" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">no data yet</div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- Step 0: Sleep -->
+    <div class="step visible" id="step0">
+      <h2 class="step-title">Sleep & rest</h2>
+      <p class="step-sub">Your sleep window tells a lot about recovery quality.</p>
+      <div class="row2">
+        <div class="field">
+          <label>Wake-up time</label>
+          <input class="time-input" type="time" id="wake" value="07:00" oninput="calc()">
+        </div>
+        <div class="field">
+          <label>Bed time</label>
+          <input class="time-input" type="time" id="bed" value="23:00" oninput="calc()">
+        </div>
+      </div>
+      <div class="field">
+        <label>Sleep quality last night</label>
+        <div class="chip-group" id="sleep-q">
+          <div class="chip" onclick="pick('sleep-q',this,'great')">Refreshed</div>
+          <div class="chip sel" onclick="pick('sleep-q',this,'ok')">Okay</div>
+          <div class="chip" onclick="pick('sleep-q',this,'poor')">Restless</div>
+          <div class="chip" onclick="pick('sleep-q',this,'bad')">Exhausted</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Woke up during night</label>
+        <div class="range-row">
+          <input type="range" min="0" max="6" value="1" oninput="this.nextElementSibling.textContent=this.value+'×';calc()" id="wakeups">
+          <span class="range-val">1×</span>
+        </div>
+      </div>
+      <div class="nav-btns"><span></span><button class="btn primary" onclick="goTo(1)">Next →</button></div>
+    </div>
+
+    <!-- Step 1: Food -->
+    <div class="step" id="step1">
+      <h2 class="step-title">Food habits</h2>
+      <p class="step-sub">Eating patterns influence cortisol and energy stability.</p>
+      <div class="field">
+        <label>Meals per day</label>
+        <div class="range-row">
+          <input type="range" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent=this.value;calc()" id="meals">
+          <span class="range-val">3</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Diet quality today</label>
+        <div class="chip-group" id="diet-q">
+          <div class="chip" onclick="pick('diet-q',this,'excellent')">Excellent</div>
+          <div class="chip sel" onclick="pick('diet-q',this,'good')">Good</div>
+          <div class="chip" onclick="pick('diet-q',this,'fair')">Fair</div>
+          <div class="chip" onclick="pick('diet-q',this,'poor')">Poor</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Caffeine intake (cups)</label>
+        <div class="range-row">
+          <input type="range" min="0" max="8" value="2" oninput="this.nextElementSibling.textContent=this.value;calc()" id="caffeine">
+          <span class="range-val">2</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Skipped meals today</label>
+        <div class="chip-group" id="skip-m">
+          <div class="chip sel" onclick="pick('skip-m',this,'none')">None</div>
+          <div class="chip" onclick="pick('skip-m',this,'one')">1 meal</div>
+          <div class="chip" onclick="pick('skip-m',this,'two')">2+ meals</div>
+        </div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn" onclick="goTo(0)">← Back</button>
+        <button class="btn primary" onclick="goTo(2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Nutrition -->
+    <div class="step" id="step2">
+      <h2 class="step-title">Nutrition intake</h2>
+      <p class="step-sub">Deficiencies amplify stress response.</p>
+      <div class="field">
+        <label>Water intake (glasses)</label>
+        <div class="range-row">
+          <input type="range" min="0" max="12" value="6" oninput="this.nextElementSibling.textContent=this.value;calc()" id="water">
+          <span class="range-val">6</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Protein adequacy</label>
+        <div class="chip-group" id="protein">
+          <div class="chip" onclick="pick('protein',this,'high')">High</div>
+          <div class="chip sel" onclick="pick('protein',this,'med')">Moderate</div>
+          <div class="chip" onclick="pick('protein',this,'low')">Low</div>
+          <div class="chip" onclick="pick('protein',this,'vlow')">Very low</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Vitamins / supplements taken today</label>
+        <div class="chip-group" id="vitamins">
+          <div class="chip sel" onclick="pick('vitamins',this,'yes')">Yes</div>
+          <div class="chip" onclick="pick('vitamins',this,'no')">No</div>
+          <div class="chip" onclick="pick('vitamins',this,'some')">Some</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Sugar / junk food today</label>
+        <div class="range-row">
+          <input type="range" min="0" max="5" value="1" oninput="this.nextElementSibling.textContent=this.value;calc()" id="junk">
+          <span class="range-val">1</span>
+        </div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn" onclick="goTo(1)">← Back</button>
+        <button class="btn primary" onclick="goTo(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Behaviour -->
+    <div class="step" id="step3">
+      <h2 class="step-title">Behaviour signals</h2>
+      <p class="step-sub">Typing speed and emotional state are reliable stress proxies.</p>
+      <div class="field">
+        <label>Typing test — type the sentence below</label>
+        <div class="typing-target" id="typing-target">the quick brown fox jumps over the lazy dog near the river bank</div>
+        <input id="typing-input" type="text" placeholder="start typing here..." oninput="typingCheck()" autocomplete="off" autocorrect="off" spellcheck="false">
+        <div class="typing-stats">
+          <span>Accuracy: <strong id="acc-out">—</strong></span>
+          <span>Speed: <strong id="wpm-out">—</strong></span>
+          <span>Errors: <strong id="err-out">—</strong></span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:1rem">
+        <label>Anxiety level right now</label>
+        <div class="range-row">
+          <input type="range" min="0" max="10" value="3" oninput="this.nextElementSibling.textContent=this.value+'/10';calc()" id="anxiety">
+          <span class="range-val">3/10</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Nervousness / restlessness today</label>
+        <div class="chip-group" id="nerv">
+          <div class="chip sel" onclick="pick('nerv',this,'none')">None</div>
+          <div class="chip" onclick="pick('nerv',this,'mild')">Mild</div>
+          <div class="chip" onclick="pick('nerv',this,'moderate')">Moderate</div>
+          <div class="chip" onclick="pick('nerv',this,'severe')">Severe</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Physical tension (neck, jaw, shoulders)</label>
+        <div class="range-row">
+          <input type="range" min="0" max="10" value="2" oninput="this.nextElementSibling.textContent=this.value+'/10';calc()" id="tension">
+          <span class="range-val">2/10</span>
+        </div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn" onclick="goTo(2)">← Back</button>
+        <button class="btn primary" onclick="goTo(4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Custom -->
+    <div class="step" id="step4">
+      <h2 class="step-title">Custom factors</h2>
+      <p class="step-sub">Add what matters to you — the calculator learns your unique profile.</p>
+      <div class="field">
+        <label>Preset extras</label>
+        <div class="chip-group" id="extras">
+          <div class="chip" onclick="toggleChip(this,'Exercise')">Exercise today</div>
+          <div class="chip" onclick="toggleChip(this,'Meditation')">Meditation</div>
+          <div class="chip" onclick="toggleChip(this,'Overworking')">Overworking</div>
+          <div class="chip" onclick="toggleChip(this,'Deadlines')">Deadlines</div>
+          <div class="chip" onclick="toggleChip(this,'Conflict')">Conflict/argument</div>
+          <div class="chip" onclick="toggleChip(this,'Outdoor')">Time outdoors</div>
+          <div class="chip" onclick="toggleChip(this,'Screen')">Excess screen time</div>
+          <div class="chip" onclick="toggleChip(this,'Alcohol')">Alcohol</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Add your own factor</label>
+        <div class="custom-wrap">
+          <input class="custom-input" id="custom-inp" placeholder="e.g. bad commute, argument with boss…">
+          <select class="custom-input" id="custom-effect" style="width:110px">
+            <option value="-5">Reduces (-)</option>
+            <option value="5" selected>Adds (+)</option>
+            <option value="10">Adds (++)</option>
+          </select>
+          <button class="btn" onclick="addCustom()">Add</button>
+        </div>
+        <div id="custom-tags" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"></div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn" onclick="goTo(3)">← Back</button>
+        <button class="btn primary" onclick="goTo(5);finalCalc()">See results →</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Results -->
+    <div class="step" id="step5">
+      <h2 class="step-title">Your stress report</h2>
+      <p class="step-sub" id="res-date">Today's snapshot</p>
+      <div class="result-grid">
+        <div class="metric-card"><div class="mc-label">Overall score</div><div class="mc-val" id="res-score">—</div><div class="mc-sub" id="res-band">—</div></div>
+        <div class="metric-card"><div class="mc-label">Sleep debt</div><div class="mc-val" id="res-sleep">—</div><div class="mc-sub">hrs vs 8hr target</div></div>
+        <div class="metric-card"><div class="mc-label">Nutrition index</div><div class="mc-val" id="res-nutr">—</div><div class="mc-sub">/ 10</div></div>
+        <div class="metric-card"><div class="mc-label">Behavioural load</div><div class="mc-val" id="res-beh">—</div><div class="mc-sub">/ 10</div></div>
+      </div>
+      <div id="bars-wrap" style="margin-bottom:1.5rem"></div>
+      <div id="tips-wrap"></div>
+      <div class="nav-btns">
+        <button class="btn" onclick="goTo(4)">← Edit</button>
+        <button class="btn primary" onclick="sendPrompt('Based on my stress score, give me a personalised recovery plan for today. My score breakdown: ' + getScoreBreakdown())">Get recovery plan ↗</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const STEPS=6;
+let typingStart=null,typingDone=false,wpmVal=50,accVal=100;
+const TARGET='the quick brown fox jumps over the lazy dog near the river bank';
+
+function goTo(n){
+  for(let i=0;i<STEPS;i++){
+    document.getElementById('step'+i).classList.toggle('visible',i===n);
+    const ni=document.getElementById('nav'+i);
+    ni.classList.toggle('active',i===n);
+    if(i<n)ni.classList.add('done'); else ni.classList.remove('done');
+  }
+  calc();
+}
+
+function pick(group,el,val){
+  document.querySelectorAll('#'+group+' .chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  el.dataset.val=val;
+  calc();
+}
+
+function toggleChip(el,name){
+  el.classList.toggle('sel');
+  calc();
+}
+
+function getSel(group){
+  const s=document.querySelector('#'+group+' .chip.sel');
+  return s?s.dataset.val||s.textContent.trim():'';
+}
+
+function sleepHours(){
+  const w=document.getElementById('wake').value||'07:00';
+  const b=document.getElementById('bed').value||'23:00';
+  const [wh,wm]=w.split(':').map(Number);
+  const [bh,bm]=b.split(':').map(Number);
+  let wMin=wh*60+wm, bMin=bh*60+bm;
+  if(bMin>=wMin)bMin-=1440;
+  return Math.round((wMin-bMin)/60*10)/10;
+}
+
+let customFactors=[];
+function addCustom(){
+  const inp=document.getElementById('custom-inp');
+  const ef=parseInt(document.getElementById('custom-effect').value);
+  if(!inp.value.trim())return;
+  customFactors.push({name:inp.value.trim(),effect:ef});
+  renderCustomTags();
+  inp.value='';
+  calc();
+}
+function removeCustom(i){customFactors.splice(i,1);renderCustomTags();calc()}
+function renderCustomTags(){
+  const wrap=document.getElementById('custom-tags');
+  wrap.innerHTML=customFactors.map((f,i)=>
+    `<div class="custom-tag">${f.name} <span style="color:${f.effect>0?'#E24B4A':'#1D9E75'}">${f.effect>0?'+'+f.effect:f.effect}</span><span class="rm" onclick="removeCustom(${i})">×</span></div>`
+  ).join('');
+}
+
+function calcScore(){
+  let s=0;
+  const hrs=sleepHours();
+  if(hrs<5)s+=25; else if(hrs<6)s+=18; else if(hrs<7)s+=10; else if(hrs<8)s+=4; else s+=0;
+  const sq=getSel('sleep-q');
+  s+={great:-5,ok:0,poor:8,bad:15}[sq]||0;
+  s+=parseInt(document.getElementById('wakeups').value||0)*3;
+  const meals=parseInt(document.getElementById('meals').value||3);
+  if(meals<=1)s+=10; else if(meals===2)s+=5; else if(meals>=4)s-=3;
+  const dq=getSel('diet-q');
+  s+={excellent:-5,good:0,fair:7,poor:14}[dq]||0;
+  const caff=parseInt(document.getElementById('caffeine').value||0);
+  if(caff>=5)s+=12; else if(caff>=3)s+=6; else if(caff===0)s-=2;
+  const sk=getSel('skip-m');
+  s+={none:0,one:6,two:12}[sk]||0;
+  const water=parseInt(document.getElementById('water').value||6);
+  if(water<4)s+=10; else if(water<6)s+=4; else s-=2;
+  const pr=getSel('protein');
+  s+={high:-4,med:0,low:7,vlow:14}[pr]||0;
+  const vit=getSel('vitamins');
+  s+={yes:-3,some:0,no:4}[vit]||0;
+  s+=parseInt(document.getElementById('junk').value||0)*2;
+  s+=Math.round((50-Math.min(wpmVal,120))/8);
+  s+=Math.round((100-accVal)/5);
+  s+=parseInt(document.getElementById('anxiety').value||0)*2;
+  const nv=getSel('nerv');
+  s+={none:0,mild:5,moderate:12,severe:20}[nv]||0;
+  s+=parseInt(document.getElementById('tension').value||0)*1.5;
+  const extras=document.querySelectorAll('#extras .chip.sel');
+  extras.forEach(e=>{
+    const t=e.textContent.trim();
+    if(t==='Exercise today')s-=10;
+    else if(t==='Meditation')s-=8;
+    else if(t==='Time outdoors')s-=5;
+    else if(t==='Overworking')s+=12;
+    else if(t==='Deadlines')s+=8;
+    else if(t==='Conflict/argument')s+=10;
+    else if(t==='Excess screen time')s+=6;
+    else if(t==='Alcohol')s+=8;
+  });
+  customFactors.forEach(f=>s+=f.effect);
+  return Math.max(0,Math.min(100,Math.round(s)));
+}
+
+function calc(){
+  const sc=calcScore();
+  document.getElementById('score-num').textContent=sc;
+  const ring=document.getElementById('ring-fill');
+  const circ=301.6;
+  ring.style.strokeDashoffset=circ-(circ*sc/100);
+  let col,txt;
+  if(sc<25){col='#3B6D11';txt='low stress'}
+  else if(sc<50){col='#BA7517';txt='moderate'}
+  else if(sc<75){col='#D85A30';txt='elevated'}
+  else{col='#E24B4A';txt='high stress'}
+  ring.style.stroke=col;
+  const vd=document.getElementById('verdict');
+  vd.textContent=txt;
+  vd.style.background=col+'22';
+  vd.style.color=col;
+}
+
+function getScoreBreakdown(){
+  const hrs=sleepHours();
+  return `score=${calcScore()}, sleep=${hrs}hrs, anxiety=${document.getElementById('anxiety').value}/10, caffeine=${document.getElementById('caffeine').value} cups, water=${document.getElementById('water').value} glasses`;
+}
+
+function finalCalc(){
+  const sc=calcScore();
+  document.getElementById('res-score').textContent=sc+' / 100';
+  let band;
+  if(sc<25)band='Low — you\'re managing well';
+  else if(sc<50)band='Moderate — watch key habits';
+  else if(sc<75)band='Elevated — take action';
+  else band='High — prioritise recovery';
+  document.getElementById('res-band').textContent=band;
+  const hrs=sleepHours();
+  document.getElementById('res-sleep').textContent=(hrs-8).toFixed(1);
+  const water=parseInt(document.getElementById('water').value);
+  const pr={high:10,med:7,low:4,vlow:1}[getSel('protein')]||5;
+  const vit={yes:10,some:6,no:2}[getSel('vitamins')]||5;
+  const nutr=Math.round((pr+vit+Math.min(water,8))/2.8);
+  document.getElementById('res-nutr').textContent=nutr;
+  const anx=parseInt(document.getElementById('anxiety').value);
+  const nv={none:0,mild:2,moderate:5,severe:8}[getSel('nerv')]||0;
+  const ten=parseInt(document.getElementById('tension').value);
+  document.getElementById('res-beh').textContent=Math.min(10,Math.round((anx+nv+ten)/3));
+  const cats=[
+    {label:'Sleep quality',val:hrs>=8?100:Math.round(hrs/8*100),col:'#185FA5'},
+    {label:'Nutrition',val:Math.min(100,nutr*10),col:'#1D9E75'},
+    {label:'Hydration',val:Math.min(100,Math.round(water/8*100)),col:'#3266ad'},
+    {label:'Calm & focus',val:Math.max(0,100-anx*10-nv*10),col:'#7F77DD'},
+  ];
+  document.getElementById('bars-wrap').innerHTML=cats.map(c=>`
+    <div class="bar-wrap">
+      <div class="bar-label"><span>${c.label}</span><span>${c.val}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${c.val}%;background:${c.col}"></div></div>
+    </div>`).join('');
+  const tips=[];
+  if(hrs<7)tips.push('Aim for 7–9 hours of sleep. Consider shifting your bedtime earlier by 30 min tonight.');
+  if(parseInt(document.getElementById('caffeine').value)>=4)tips.push('High caffeine can spike cortisol — try replacing afternoon coffee with herbal tea.');
+  if(water<6)tips.push('You\'re under-hydrated. Even mild dehydration elevates stress hormones.');
+  if(anx>=6)tips.push('Anxiety is elevated. Try 4-7-8 breathing: inhale 4s, hold 7s, exhale 8s.');
+  if(tips.length===0)tips.push('Your habits look solid today. Keep up the good work!');
+  document.getElementById('tips-wrap').innerHTML=tips.map(t=>`<div class="tip-box"><p>${t}</p></div>`).join('');
+  const d=new Date();
+  document.getElementById('res-date').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+}
+
+function typingCheck(){
+  const inp=document.getElementById('typing-input');
+  const val=inp.value;
+  if(val.length===1&&!typingStart)typingStart=Date.now();
+  const words=val.trim().split(/\s+/).filter(Boolean).length;
+  const targetWords=TARGET.split(' ');
+  const typedWords=val.trim().split(/\s+/);
+  let errors=0;
+  typedWords.forEach((w,i)=>{if(w!==targetWords[i])errors++});
+  const acc=val.length?Math.max(0,Math.round((1-errors/Math.max(typedWords.length,1))*100)):100;
+  let wpm=50;
+  if(typingStart&&words>0){
+    const mins=(Date.now()-typingStart)/60000;
+    wpm=Math.round(words/mins);
+  }
+  document.getElementById('acc-out').textContent=acc+'%';
+  document.getElementById('wpm-out').textContent=wpm+' wpm';
+  document.getElementById('err-out').textContent=errors;
+  accVal=acc;wpmVal=Math.min(wpm,200);
+  calc();
+  const highlighted=TARGET.split('').map((ch,i)=>{
+    if(i>=val.length)return ch;
+    return val[i]===ch?`<span style="color:var(--color-text-primary)">${ch}</span>`:`<span style="background:#F7C1C1;color:#A32D2D;border-radius:2px">${ch}</span>`;
+  }).join('');
+  document.getElementById('typing-target').innerHTML=highlighted;
+}
+
+calc();
+</script>

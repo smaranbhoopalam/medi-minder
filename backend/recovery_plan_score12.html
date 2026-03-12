@@ -1,0 +1,235 @@
+
+<style>
+.rp-wrap{padding:0.25rem 0}
+.status-bar{display:flex;align-items:center;gap:16px;padding:14px 18px;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem}
+.status-dot{width:12px;height:12px;border-radius:50%;background:#3B6D11;flex-shrink:0}
+.status-text{font-size:13px;color:var(--color-text-primary);font-weight:500}
+.status-sub{font-size:12px;color:var(--color-text-secondary);margin-left:auto}
+
+.section-label{font-size:10px;letter-spacing:0.08em;color:var(--color-text-tertiary);text-transform:uppercase;margin-bottom:10px;margin-top:1.5rem}
+
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:grid;grid-template-columns:64px 1px 1fr;gap:0 16px;min-height:64px}
+.tl-time{font-size:11px;color:var(--color-text-secondary);padding-top:4px;text-align:right}
+.tl-line-wrap{display:flex;flex-direction:column;align-items:center;gap:0}
+.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px;border:2px solid var(--color-background-primary)}
+.tl-line{flex:1;width:1px;background:var(--color-border-tertiary);margin-top:2px}
+.tl-item:last-child .tl-line{display:none}
+.tl-content{padding:2px 0 20px}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.tl-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.tl-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;margin-top:5px}
+
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:10px;margin-bottom:1rem}
+.insight-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px}
+.ic-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.ic-icon{width:28px;height:28px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ic-icon svg{width:14px;height:14px}
+.ic-label{font-size:11px;font-weight:500;color:var(--color-text-primary)}
+.ic-val{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.ic-note{font-size:11px;color:var(--color-text-secondary)}
+
+.prog-row{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem}
+.prog-item{display:flex;align-items:center;gap:12px}
+.prog-label{font-size:12px;color:var(--color-text-secondary);width:90px;flex-shrink:0}
+.prog-track{flex:1;height:5px;background:var(--color-background-tertiary);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px}
+.prog-pct{font-size:11px;color:var(--color-text-secondary);width:32px;text-align:right;flex-shrink:0}
+
+.affirmation{border-left:2px solid #1D9E75;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:10px 14px;background:var(--color-background-secondary);margin-bottom:1.5rem}
+.affirmation p{font-size:13px;color:var(--color-text-secondary);line-height:1.7;font-style:italic}
+
+.action-row{display:flex;gap:10px;flex-wrap:wrap}
+.action-btn{padding:8px 16px;font-size:12px;border-radius:var(--border-radius-md);cursor:pointer;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary)}
+.action-btn:hover{background:var(--color-background-secondary)}
+.action-btn.p{background:var(--color-text-primary);color:var(--color-background-primary);border-color:transparent}
+.action-btn.p:hover{opacity:0.85}
+
+.check-list{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem}
+.check-item{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
+.check-box{width:16px;height:16px;border-radius:4px;border:0.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.check-box.checked{background:#3B6D11;border-color:#3B6D11}
+.check-box.checked svg{display:block}
+.check-box svg{display:none;width:10px;height:10px}
+.check-text{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.check-item.done .check-text{text-decoration:line-through;color:var(--color-text-tertiary)}
+</style>
+
+<div class="rp-wrap">
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    <div class="status-text">stress score 12 — low zone</div>
+    <div class="status-sub">maintenance plan · today</div>
+  </div>
+
+  <div class="section-label">your baseline at a glance</div>
+  <div class="cards-grid">
+    <div class="insight-card">
+      <div class="ic-top">
+        <div class="ic-icon" style="background:#EAF3DE">
+          <svg viewBox="0 0 16 16" fill="none" stroke="#3B6D11" stroke-width="1.5"><path d="M8 2C5 2 3 4 3 7c0 2 1 3.5 3 4.5V13h4v-1.5c2-1 3-2.5 3-4.5 0-3-2-5-5-5z"/></svg>
+        </div>
+        <div class="ic-label">sleep</div>
+      </div>
+      <div class="ic-val">8 hrs</div>
+      <div class="ic-note">on target — well recovered</div>
+    </div>
+    <div class="insight-card">
+      <div class="ic-top">
+        <div class="ic-icon" style="background:#E6F1FB">
+          <svg viewBox="0 0 16 16" fill="none" stroke="#185FA5" stroke-width="1.5"><ellipse cx="8" cy="10" rx="4" ry="5"/><path d="M8 5V2"/></svg>
+        </div>
+        <div class="ic-label">hydration</div>
+      </div>
+      <div class="ic-val">6 glasses</div>
+      <div class="ic-note">nearly optimal — add 2 more</div>
+    </div>
+    <div class="insight-card">
+      <div class="ic-top">
+        <div class="ic-icon" style="background:#FAEEDA">
+          <svg viewBox="0 0 16 16" fill="none" stroke="#854F0B" stroke-width="1.5"><path d="M3 6h10M5 4l1 8M11 4l-1 8"/></svg>
+        </div>
+        <div class="ic-label">caffeine</div>
+      </div>
+      <div class="ic-val">2 cups</div>
+      <div class="ic-note">safe zone — no cut needed</div>
+    </div>
+    <div class="insight-card">
+      <div class="ic-top">
+        <div class="ic-icon" style="background:#EEEDFE">
+          <svg viewBox="0 0 16 16" fill="none" stroke="#534AB7" stroke-width="1.5"><circle cx="8" cy="8" r="5"/><path d="M8 5v3l2 2"/></svg>
+        </div>
+        <div class="ic-label">anxiety</div>
+      </div>
+      <div class="ic-val">3 / 10</div>
+      <div class="ic-note">well regulated — keep it here</div>
+    </div>
+  </div>
+
+  <div class="section-label">habit strength today</div>
+  <div class="prog-row">
+    <div class="prog-item">
+      <span class="prog-label">sleep quality</span>
+      <div class="prog-track"><div class="prog-fill" style="width:100%;background:#3B6D11"></div></div>
+      <span class="prog-pct">100%</span>
+    </div>
+    <div class="prog-item">
+      <span class="prog-label">hydration</span>
+      <div class="prog-track"><div class="prog-fill" style="width:75%;background:#185FA5"></div></div>
+      <span class="prog-pct">75%</span>
+    </div>
+    <div class="prog-item">
+      <span class="prog-label">caffeine control</span>
+      <div class="prog-track"><div class="prog-fill" style="width:88%;background:#639922"></div></div>
+      <span class="prog-pct">88%</span>
+    </div>
+    <div class="prog-item">
+      <span class="prog-label">calm & focus</span>
+      <div class="prog-track"><div class="prog-fill" style="width:70%;background:#7F77DD"></div></div>
+      <span class="prog-pct">70%</span>
+    </div>
+  </div>
+
+  <div class="section-label">today's recovery timeline</div>
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-time">morning</div>
+      <div class="tl-line-wrap"><div class="tl-dot" style="background:#3B6D11"></div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Morning anchor — 10 min</div>
+        <div class="tl-desc">Since you slept 8 hrs, your cortisol is peaking naturally. Don't check your phone for the first 20 min. Go outside or sit by a window to reinforce the circadian anchor.</div>
+        <span class="tl-badge" style="background:#EAF3DE;color:#27500A">cortisol regulation</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">mid-AM</div>
+      <div class="tl-line-wrap"><div class="tl-dot" style="background:#185FA5"></div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Hydration top-up</div>
+        <div class="tl-desc">You're at 6 glasses — aim for 2 more by noon. Keep a glass on your desk. At your anxiety level, even mild dehydration can nudge it upward unnecessarily.</div>
+        <span class="tl-badge" style="background:#E6F1FB;color:#0C447C">hydration</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">noon</div>
+      <div class="tl-line-wrap"><div class="tl-dot" style="background:#639922"></div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Balanced lunch — no skipping</div>
+        <div class="tl-desc">Prioritise protein + complex carbs to keep blood sugar flat through the afternoon. A stable glucose curve is your best friend for keeping anxiety at 3 or below.</div>
+        <span class="tl-badge" style="background:#EAF3DE;color:#27500A">nutrition</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">2–3 PM</div>
+      <div class="tl-line-wrap"><div class="tl-dot" style="background:#7F77DD"></div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Focus block — protect it</div>
+        <div class="tl-desc">Your cognitive state is sharp today. Use this window for your hardest or most creative task. Resist the urge to fill it with meetings or notifications.</div>
+        <span class="tl-badge" style="background:#EEEDFE;color:#3C3489">peak performance</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">4 PM</div>
+      <div class="tl-line-wrap"><div class="tl-dot" style="background:#BA7517"></div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Last caffeine cutoff</div>
+        <div class="tl-desc">2 cups is perfect but don't add a late cup. Caffeine's half-life is ~5 hrs — anything after 4 PM will still be active at bedtime and could compromise tomorrow's sleep quality.</div>
+        <span class="tl-badge" style="background:#FAEEDA;color:#633806">sleep protection</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">evening</div>
+      <div class="tl-line-wrap"><div class="tl-dot" style="background:#D4537E"></div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-title">20-min movement</div>
+        <div class="tl-desc">A walk, light jog, or yoga session will flush any residual cortisol and prime melatonin production. Your anxiety is low — exercise will lock it in, not spike it.</div>
+        <span class="tl-badge" style="background:#FBEAF0;color:#72243E">cortisol flush</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">wind-down</div>
+      <div class="tl-line-wrap"><div class="tl-dot" style="background:#5F5E5A"></div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Protect tonight's sleep</div>
+        <div class="tl-desc">Dim screens 90 min before bed. Since you already slept 8 hrs last night, keep the same bedtime — your body is in a good rhythm. Don't break it.</div>
+        <span class="tl-badge" style="background:#F1EFE8;color:#444441">sleep hygiene</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label" style="margin-top:1.5rem">today's micro-checklist</div>
+  <div class="check-list" id="checklist">
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.8"><path d="M2 5l2.5 2.5L8 3"/></svg></div><div class="check-text">No phone for first 20 min after waking</div></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.8"><path d="M2 5l2.5 2.5L8 3"/></svg></div><div class="check-text">Drink 2 extra glasses of water before noon</div></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.8"><path d="M2 5l2.5 2.5L8 3"/></svg></div><div class="check-text">Eat a protein-rich lunch — don't skip</div></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.8"><path d="M2 5l2.5 2.5L8 3"/></svg></div><div class="check-text">Block 2 hrs for deep focused work this afternoon</div></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.8"><path d="M2 5l2.5 2.5L8 3"/></svg></div><div class="check-text">No caffeine after 4 PM</div></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.8"><path d="M2 5l2.5 2.5L8 3"/></svg></div><div class="check-text">20 min of movement in the evening</div></div>
+    <div class="check-item" onclick="toggle(this)"><div class="check-box"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="1.8"><path d="M2 5l2.5 2.5L8 3"/></svg></div><div class="check-text">Screens off 90 min before bed</div></div>
+  </div>
+
+  <div class="affirmation">
+    <p>A score of 12 means your body and mind are working with you today, not against you. The goal isn't recovery — it's amplification. Use this energy for something that matters to you.</p>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn p" onclick="sendPrompt('Give me a 5-minute breathing exercise to keep anxiety at 3 or below throughout the day')">Breathing exercise ↗</button>
+    <button class="action-btn" onclick="sendPrompt('What foods should I eat today to keep my stress score low tomorrow?')">Optimal meals ↗</button>
+    <button class="action-btn" onclick="sendPrompt('Design a 20-minute evening movement routine suited for low stress maintenance')">Evening workout ↗</button>
+  </div>
+</div>
+
+<script>
+function toggle(el){
+  el.classList.toggle('done');
+  el.querySelector('.check-box').classList.toggle('checked');
+}
+</script>
